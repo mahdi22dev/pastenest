@@ -33,7 +33,11 @@ export class PasteController {
   @Roles(Role.Guest)
   @UseGuards(RolesGuard)
   @Get(':id')
-  findOne(@Param('id') id: string, @Query('password') password: string) {
-    return this.pasteService.findOne(id, password);
+  findOne(
+    @Param('id') id: string,
+    @Query('password') password: string,
+    @Req() request: Request,
+  ) {
+    return this.pasteService.findOne(id, password, request);
   }
 }

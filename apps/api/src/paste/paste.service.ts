@@ -10,20 +10,24 @@ import { Mode } from '@prisma/client';
 import { compareHashes, hashPassword } from 'src/lib/utils';
 import { Request } from 'express';
 import * as shortid from 'shortid';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class PasteService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private jwtService: JwtService,
+  ) {}
 
   async create(createPasteDto: CreatePasteDto, request: Request) {
     try {
       // check v3 captcha
-      // const bot = await this.validateCaptcha(createPasteDto);
-      // console.log(bot);
+      const bot = await this.validateCaptcha(createPasteDto);
+      console.log(bot);
 
-      // if (!bot) {
-      //   throw new ServiceUnavailableException("Couldn't complete the request");
-      // }
+      if (!bot) {
+        throw new ServiceUnavailableException("Couldn't complete the request");
+      }
 
       // check experation date
       const user = request.user as {
@@ -62,7 +66,7 @@ export class PasteService {
     }
   }
 
-  async findOne(id: string, password: string) {
+  async findOne(id: string, password: string, request: Request) {
     try {
       const paste = await this.prisma.paste.findUnique({
         where: { pasteId: id },
@@ -73,6 +77,46 @@ export class PasteService {
 
       if (paste?.mode == 'PASSWORD' && !password) {
         return { mode: paste.mode, unlocked: false };
+      }
+      if (paste.mode == 'PRIVATE') {
+        console.log('private paste');
+        const auth_token = request.cookies.pastenest_access_token;
+
+        if (!auth_token) {
+          return {
+            mode: paste.mode,
+            unlocked: false,
+            error: "don't have ownership",
+          };
+        }
+
+        const user = await this.jwtService.verify(auth_token, {});
+
+        if (user) {
+          console.log(user.id);
+          const userdb = await this.prisma.user.findUnique({
+            where: { id: user.id },
+          });
+
+          if (paste.authorId === userdb?.id) {
+            return {
+              ...paste,
+              unlocked: true,
+            };
+          } else {
+            return {
+              mode: paste.mode,
+              unlocked: false,
+              error: "Don't have ownership",
+            };
+          }
+        } else {
+          return {
+            mode: paste.mode,
+            unlocked: false,
+            error: "don't have ownership",
+          };
+        }
       }
 
       if (password && paste?.password) {

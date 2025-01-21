@@ -21,12 +21,14 @@ export class AuthService {
   async signIn(FindUserDto: FindUserDto, response: Response, request: Request) {
     try {
       // check bots
+      console.log('check bots');
+
       const bot = await this.validateCaptcha(request);
       if (!bot) {
         throw new ServiceUnavailableException("Couldn't complete the request");
       }
 
-      // get user fromdb
+      // get user from db
       const user = await this.usersService.findOne(FindUserDto);
       if (!user) {
         throw new NotFoundException(
@@ -92,6 +94,8 @@ export class AuthService {
     response: Response,
     request: Request,
   ) {
+    console.log('sign up endpoint');
+
     const bot = await this.validateCaptcha(request);
     if (!bot) {
       throw new ServiceUnavailableException("Couldn't complete the request");
