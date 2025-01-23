@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { getPasteAction } from "../actions/actions";
 import { Link, useParams } from "react-router-dom";
 import { Paste } from ".pnpm/@prisma+client@5.19.0_prisma@5.19.0/node_modules/@prisma/client";
+import { useQuery } from "react-query";
 import { BounceLoader } from "react-spinners";
 import ReactCodeMirror, { Extension } from "@uiw/react-codemirror";
 import { Button } from "@/components/ui/button";
@@ -19,13 +20,11 @@ import { Input } from "@/components/ui/input";
 
 function Past() {
   const params = useParams();
-  const [extensions, setExtensions] = useState<Extension[]>();
-  const [loading, setloading] = useState(true);
+  const [extensions] = useState<Extension[]>();
   const [_, setBtnloading] = useState(false);
   const [error, setError] = useState(false);
   const [locked, setLocked] = useState(false);
   const [password, setPassword] = useState<string | null>("");
-  const [data, setData] = useState<Paste & { unlocked: boolean }>();
 
   const handleUnlock = async () => {
     try {
@@ -36,12 +35,9 @@ function Past() {
       setBtnloading(false);
     }
   };
-  const fetchData = async () => {
+  const fetchData = async (): Promise<Paste | undefined> => {
     try {
-      setloading(true);
       const paste = await getPasteAction(params, password);
-      console.log(paste);
-
       // @ts-expect-error
       if (paste?.error && paste?.unlocked === false) {
         setError(true);
@@ -54,63 +50,62 @@ function Past() {
       }
       if (!paste) {
         setError(true);
+        return undefined;
       } else {
-        setData(paste);
+        return paste;
       }
     } catch (error) {
       setError(true);
-    } finally {
-      setloading(false);
     }
   };
+  const { data, isLoading } = useQuery("efewfwf", fetchData, {
+    staleTime: 1 * 60 * 1000,
+    cacheTime: 1 * 60 * 1000,
+    refetchOnMount: false,
+  });
 
-  // implement caching using react cache
-  useEffect(() => {
-    fetchData();
-  }, []);
+  // useEffect(() => {
+  //   async function loadLanguage() {
+  //     let languageExtension: Extension;
+  //     switch (data?.syntax) {
+  //       case "javascript":
+  //         languageExtension = (
+  //           await import("@codemirror/lang-javascript")
+  //         ).javascript();
+  //         break;
+  //       case "python":
+  //         languageExtension = (
+  //           await import("@codemirror/lang-python")
+  //         ).python();
+  //         break;
+  //       case "java":
+  //         languageExtension = (await import("@codemirror/lang-java")).java();
+  //         break;
+  //       case "html":
+  //         languageExtension = (await import("@codemirror/lang-html")).html();
+  //         break;
+  //       case "css":
+  //         languageExtension = (await import("@codemirror/lang-css")).css();
+  //         break;
+  //       case "php":
+  //         languageExtension = (await import("@codemirror/lang-php")).php();
+  //         break;
+  //       case "ruby":
+  //         languageExtension = (await import("@codemirror/lang-css")).css();
+  //         break;
+  //       default:
+  //         languageExtension = (
+  //           await import("@codemirror/lang-javascript")
+  //         ).javascript(); // Default
+  //     }
 
-  useEffect(() => {
-    async function loadLanguage() {
-      let languageExtension: Extension;
-      switch (data?.syntax) {
-        case "javascript":
-          languageExtension = (
-            await import("@codemirror/lang-javascript")
-          ).javascript();
-          break;
-        case "python":
-          languageExtension = (
-            await import("@codemirror/lang-python")
-          ).python();
-          break;
-        case "java":
-          languageExtension = (await import("@codemirror/lang-java")).java();
-          break;
-        case "html":
-          languageExtension = (await import("@codemirror/lang-html")).html();
-          break;
-        case "css":
-          languageExtension = (await import("@codemirror/lang-css")).css();
-          break;
-        case "php":
-          languageExtension = (await import("@codemirror/lang-php")).php();
-          break;
-        case "ruby":
-          languageExtension = (await import("@codemirror/lang-css")).css();
-          break;
-        default:
-          languageExtension = (
-            await import("@codemirror/lang-javascript")
-          ).javascript(); // Default
-      }
+  //     setExtensions([languageExtension]);
+  //   }
 
-      setExtensions([languageExtension]);
-    }
-
-    if (data) {
-      loadLanguage();
-    }
-  }, [data]);
+  //   if (data) {
+  //     loadLanguage();
+  //   }
+  // }, [data]);
 
   if (error) {
     return (
@@ -120,7 +115,7 @@ function Past() {
       </div>
     );
   }
-  if (loading) {
+  if (isLoading) {
     return (
       <div>
         <BounceLoader size={70} color="#e390eb" />
@@ -166,11 +161,7 @@ function Past() {
               />
             </div>
             <div className="space-y-3 w-full">
-              <PasteInfoItem
-                text="Visibility"
-                info={data?.mode && data?.mode}
-                Icon={View}
-              />
+              <PasteInfoItem text="Visibility" info={data?.mode} Icon={View} />
               <PasteInfoItem
                 text="Expires"
                 info={

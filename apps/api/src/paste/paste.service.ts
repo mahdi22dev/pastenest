@@ -71,6 +71,8 @@ export class PasteService {
       const paste = await this.prisma.paste.findUnique({
         where: { pasteId: id },
       });
+      console.log(paste);
+
       if (!paste) {
         throw new NotFoundException('Requested resources not found');
       }

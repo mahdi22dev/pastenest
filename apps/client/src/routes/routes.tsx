@@ -2,12 +2,12 @@ import ErrorPage from "@/error-page";
 import { createBrowserRouter } from "react-router-dom";
 import Layout from "@/components/layout";
 import { About, Home } from "./Pages";
-import Signin from "./Pages/signin";
-import SignUp from "./Pages/signup";
+import Signin from "./Pages/auth-signin";
+import SignUp from "./Pages/auth-signup";
 import PrivateRoutes from "./private-routes";
-import Posts from "./Pages/posts";
+
 import RedirectFromAuth from "./redirect-from-auth";
-import Paste from "@/routes/Pages/paste";
+import Paste from "@/routes/Pages/preview-paste";
 
 const routers = createBrowserRouter([
   {
@@ -34,11 +34,7 @@ const routers = createBrowserRouter([
         children: [
           {
             path: "/user/posts",
-            element: <Posts />,
-          },
-          {
-            path: "/user/post",
-            element: <Posts />,
+            element: <div>Posts</div>,
           },
         ],
       },

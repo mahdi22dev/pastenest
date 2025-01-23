@@ -7,6 +7,7 @@ import { CiLogin, CiLogout } from "react-icons/ci";
 import { useAuth } from "@/providers/auth-guard";
 import { Button } from "./ui/button";
 import { toast } from "@/hooks/use-toast";
+import logo from "@/assets/logo.png";
 
 const Navbar = memo(() => {
   const isMobile = useDeviceType();
@@ -56,7 +57,16 @@ const MobileNavbar = ({
     <div
       className={`md:hidden py- flex justify-between items-center w-full h-full p-5 ${toggleNav && "bg-primary text-primary-foreground"}`}
     >
-      <div>loogo</div>
+      <div className="flex items-center">
+        <a href={"/"}>
+          <img
+            src={logo}
+            alt="website logo"
+            className="w-12 h-12" // Adjust the width and height as needed
+          />
+        </a>
+      </div>
+
       <div className="flex gap-5 justify-between items-center">
         <AuthComponent
           isAuthenticated={isAuthenticated}
@@ -75,12 +85,16 @@ const MobileNavbar = ({
       {toggleNav && (
         <ul className="border-t-2 flex justify-between flex-col items-center gap-4 border-slate-500 absolute top-16 left-0 w-full bg-primary p-5 shadow-lg">
           <SingleLink path="/" name="Home" handleToggle={handleToggle} />{" "}
-          <SingleLink
+          {/* <SingleLink
             path="/user/posts"
             name="Posts"
             handleToggle={handleToggle}
+          /> */}
+          <SingleLink
+            path="/myposts"
+            name="My Pasts"
+            handleToggle={handleToggle}
           />
-          <SingleLink path="/about" name="About" handleToggle={handleToggle} />
           <div
             className="mx-auto max-w-16 flex justify-center items-center bg-transparent p-2 rounded-md cursor-pointer transition-all duration-300 ease-in-out hover:bg-black/15"
             onClick={() => setToggleNav(!toggleNav)}
@@ -101,12 +115,21 @@ const DesktopNavbar = ({
   logOut: () => Promise<void>;
 }) => {
   return (
-    <div className="hidden md:flex py-3 justify-between items-center px-5 max-w-7xl mx-auto border-b border-gray-700">
-      <div>loogo</div>
+    <div className="hidden md:flex py-3 justify-between items-center px-5 max-w-7xl mx-auto border-gray-700 mb-10">
+      <div className="flex items-center">
+        <a href={"/"}>
+          <img
+            src={logo}
+            alt="website logo"
+            className="w-12 h-12" // Adjust the width and height as needed
+          />
+        </a>
+      </div>
+
       <ul className="flex justify-between items-center gap-5">
         <SingleLink path="/" name="Create Paste" />{" "}
-        <SingleLink path="/user/posts" name="Top Pasts" />
-        <SingleLink path="/about" name="Account" />
+        {/* <SingleLink path="/user/posts" name="Top Pasts" /> */}
+        <SingleLink path="/myposts" name="My Pasts" />
         <AuthComponent isAuthenticated={isAuthenticated} logOut={logOut} />
         <div className="flex gap-5 justify-between items-center">
           <ModeToggle />
