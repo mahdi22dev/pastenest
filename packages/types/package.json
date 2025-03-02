@@ -1,0 +1,16 @@
+{
+  "name": "@pastenest/types",
+  "type": "module",
+  "scripts": {
+    "dev": "tsc --watch",
+    "build": "tsc"
+  },
+  "exports": {
+    "./add": {
+      "types": "./../../apps/api/src/lib/types.ts"
+    }
+  },
+  "devDependencies": {
+    "typescript": "latest"
+  }
+}
