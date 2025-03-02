@@ -1,3 +1,4 @@
+// @ts-ignore
 import { Paste } from ".pnpm/@prisma+client@5.19.0_prisma@5.19.0/node_modules/@prisma/client";
 
 export async function getPasteAction(

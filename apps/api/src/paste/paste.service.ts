@@ -71,8 +71,6 @@ export class PasteService {
       const paste = await this.prisma.paste.findUnique({
         where: { pasteId: id },
       });
-      console.log(paste);
-
       if (!paste) {
         throw new NotFoundException('Requested resources not found');
       }
@@ -88,7 +86,7 @@ export class PasteService {
           return {
             mode: paste.mode,
             unlocked: false,
-            error: "don't have ownership",
+            error: "Don't have ownership",
           };
         }
 
@@ -116,7 +114,7 @@ export class PasteService {
           return {
             mode: paste.mode,
             unlocked: false,
-            error: "don't have ownership",
+            error: "Don't have ownership",
           };
         }
       }

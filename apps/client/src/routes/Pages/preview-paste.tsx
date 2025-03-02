@@ -1,3 +1,4 @@
+// @ts-ignore
 import React, { useState } from "react";
 import { getPasteAction } from "../actions/actions";
 import { Link, useParams } from "react-router-dom";
