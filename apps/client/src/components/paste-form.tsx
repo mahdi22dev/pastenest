@@ -33,9 +33,6 @@ export function PasteForm() {
 
   const handlePostCreation = async (body: PasteBody) => {
     try {
-      const url = "/api/paste";
-      console.log(url);
-
       const response = await fetch(
         import.meta.env.VITE_SERVER_PATH + "/api/paste",
         {
