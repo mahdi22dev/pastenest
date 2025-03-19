@@ -15,7 +15,9 @@ const Navbar = memo(() => {
 
   const logOut = async () => {
     try {
-      const response = await fetch("/api/auth/logout");
+      const response = await fetch(
+        import.meta.env.VITE_SERVER_PATH + "/api/auth/logout"
+      );
       if (!response.ok) {
         toast({
           variant: "default",

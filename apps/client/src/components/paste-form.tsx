@@ -33,13 +33,19 @@ export function PasteForm() {
 
   const handlePostCreation = async (body: PasteBody) => {
     try {
-      const response = await fetch("/api/paste", {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify(body),
-      });
+      const url = import.meta.env.VITE_SERVER_PATH + "/api/paste";
+      console.log(url);
+
+      const response = await fetch(
+        import.meta.env.VITE_SERVER_PATH + "/api/paste",
+        {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify(body),
+        }
+      );
       const data = (await response.json()) as {
         id: number;
         pasteId: string;

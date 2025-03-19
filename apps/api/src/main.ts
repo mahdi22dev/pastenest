@@ -7,13 +7,15 @@ import * as cors from 'cors';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
   app.use(
     cors({
       origin: '*',
-      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-      allowedHeaders: 'Content-Type, Authorization',
+      methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+      allowedHeaders: ['Content-Type', 'Authorization', 'x-recaptcha-token'], // Allow custom headers
     }),
   );
+
   app.use(cookieParser());
   app.setGlobalPrefix('api');
   app.useGlobalFilters(new HttpExceptionFilter());
