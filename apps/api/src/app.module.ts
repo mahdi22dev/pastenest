@@ -10,10 +10,10 @@ import { AuthService } from './auth/auth.service';
 
 @Module({
   imports: [
-    // ServeStaticModule.forRoot({
-    //   rootPath: join(__dirname, '../..', 'client', 'dist'),
-    //   exclude: ['/api/(.*)'],
-    // }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '../..', 'client', 'dist'),
+      exclude: ['/api/(.*)'],
+    }),
     UsersModule,
     AuthModule,
     PasteModule,
