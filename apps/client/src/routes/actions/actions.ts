@@ -6,13 +6,7 @@ export async function getPasteAction(
   password: string | null
 ): Promise<(Paste & { unlocked: boolean }) | null> {
   try {
-    const url =
-      import.meta.env.VITE_SERVER_PATH +
-      "/api/paste/" +
-      params.pastId +
-      "?password=" +
-      password;
-    // implement caching using react cache
+    const url = "/api/paste/" + params.pastId + "?password=" + password;
     const response = await fetch(url);
     const data = (await response.json()) as Paste & {
       unlocked: boolean;
