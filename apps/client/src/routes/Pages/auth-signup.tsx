@@ -45,21 +45,18 @@ const SignInForm = () => {
       }
       localStorage.setItem("remember_me", "true");
       setMessage("");
-      const response = await fetch(
-        import.meta.env.VITE_SERVER_PATH + "/api/auth/signup",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-Recaptcha-Token": captchaToken,
-          },
-          body: JSON.stringify({
-            email: values.email,
-            username: values.username,
-            password: values.password,
-          }),
-        }
-      );
+      const response = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Recaptcha-Token": captchaToken,
+        },
+        body: JSON.stringify({
+          email: values.email,
+          username: values.username,
+          password: values.password,
+        }),
+      });
       let token = await response.json();
 
       if (response.status == 503) {
