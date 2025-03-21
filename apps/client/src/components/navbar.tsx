@@ -15,9 +15,15 @@ const Navbar = memo(() => {
 
   const logOut = async () => {
     try {
-      const response = await fetch(
-        import.meta.env.VITE_SERVER_PATH + "/api/auth/logout"
-      );
+      const url =
+        process.env.NODE_ENV === "development"
+          ? import.meta.env.VITE_LOCAL_SERVER_PATH
+          : import.meta.env.VITE_SERVER_PATH;
+      const response = await fetch(url + "/api/auth/logout", {
+        method: "GET",
+        credentials: "include",
+      });
+
       if (!response.ok) {
         toast({
           variant: "default",

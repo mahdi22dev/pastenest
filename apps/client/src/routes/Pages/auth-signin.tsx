@@ -38,6 +38,7 @@ const SignInForm = () => {
   const handleSignin = async (values: any) => {
     try {
       let next = searchParams.get("next");
+
       const captchaToken = await onSubmitWithReCAPTCHA();
       if (!captchaToken) {
         return toast({
@@ -65,6 +66,7 @@ const SignInForm = () => {
           username: values.username,
           password: values.password,
         }),
+        credentials: "include",
       });
 
       let token = await response.json();
@@ -82,11 +84,13 @@ const SignInForm = () => {
 
       if (token?.access_token) {
         try {
-          localStorage.setItem("auth_token", token.access_token);
-          document.cookie =
-            "pastenest_access_token=" +
-            token.access_token +
-            "; path=/; SameSite=None; Secure; max-age=2592000";
+          // localStorage.setItem("auth_token", token.access_token);
+
+          // document.cookie =
+          //   "pastenest_access_token=" +
+          //   token.access_token +
+          //   "; path=/; SameSite=None; Secure; max-age=2592000";
+
           return navigate(next ? next : "/");
         } catch (error) {
           return toast({

@@ -14,10 +14,9 @@ async function bootstrap() {
         process.env.NODE_ENV != 'production'
           ? 'http://localhost:5173'
           : 'https://pastenest.creativehandles.net',
-
       credentials: true,
       methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-      allowedHeaders: ['Content-Type', 'Authorization', 'x-recaptcha-token'], // Allow custom headers
+      allowedHeaders: ['Content-Type', 'Authorization', 'x-recaptcha-token'],
     }),
   );
 

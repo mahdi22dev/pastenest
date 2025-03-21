@@ -78,7 +78,11 @@ const SignInForm = () => {
 
       if (token?.access_token) {
         try {
-          localStorage.setItem("auth_token", token.access_token);
+          // localStorage.setItem("auth_token", token.access_token);
+          document.cookie =
+            "pastenest_access_token=" +
+            token.access_token +
+            "; path=/; SameSite=None; Secure; max-age=2592000";
           return navigate("/user/posts");
         } catch (error) {
           toast({

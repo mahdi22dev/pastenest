@@ -55,14 +55,9 @@ export class AuthService {
 
       // send token
       if (token.access_token) {
-        response.cookie('pastenest_access_token', token.access_token, {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === 'production',
-          sameSite: 'none',
-          maxAge: 30 * 24 * 60 * 60 * 1000,
-        });
-
+        response.cookie('pastenest_access_token', token.access_token);
         request['user'] = payload;
+
         return token;
       } else {
         throw new ServiceUnavailableException("Couldn't autherize user");
@@ -100,8 +95,6 @@ export class AuthService {
     response: Response,
     request: Request,
   ) {
-    console.log('sign up endpoint');
-
     const bot = await this.validateCaptcha(request);
     if (!bot) {
       throw new ServiceUnavailableException("Couldn't complete the request");
@@ -129,10 +122,7 @@ export class AuthService {
   async verify(request: Request) {
     try {
       const auth_token = request.cookies.pastenest_access_token;
-      console.log('request coming', request.cookies);
-      console.log(auth_token);
       const user = await this.jwtService.verify(auth_token, {});
-      console.log(user);
 
       return user;
     } catch (error) {
@@ -142,7 +132,7 @@ export class AuthService {
 
   async logOut(response: Response) {
     try {
-      response.clearCookie('pastenest_access_token');
+      response.cookie('pastenest_access_token', null);
     } catch (error) {
       throw new UnauthorizedException("Couldn't complete the action");
     }
