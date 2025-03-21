@@ -43,23 +43,25 @@ const SignInForm = () => {
           description: "internal server error at " + new Date().toISOString(),
         });
       }
+
       localStorage.setItem("remember_me", "true");
       setMessage("");
-      const response = await fetch(
-        import.meta.env.VITE_SERVER_PATH + "/api/auth/signup",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-Recaptcha-Token": captchaToken,
-          },
-          body: JSON.stringify({
-            email: values.email,
-            username: values.username,
-            password: values.password,
-          }),
-        }
-      );
+      const url =
+        process.env.NODE_ENV === "development"
+          ? import.meta.env.VITE_LOCAL_SERVER_PATH
+          : import.meta.env.VITE_SERVER_PATH;
+      const response = await fetch(url + "/api/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Recaptcha-Token": captchaToken,
+        },
+        body: JSON.stringify({
+          email: values.email,
+          username: values.username,
+          password: values.password,
+        }),
+      });
       let token = await response.json();
 
       if (response.status == 503) {

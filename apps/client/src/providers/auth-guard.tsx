@@ -21,7 +21,16 @@ export const AuthProvider = ({ children }: { children: JSX.Element }) => {
   const verfiyToken = async () => {
     try {
       setprotectedLoading(true);
-      const respnse = await fetch("/api/auth/verify");
+      const url =
+        process.env.NODE_ENV === "development"
+          ? import.meta.env.VITE_LOCAL_SERVER_PATH
+          : import.meta.env.VITE_SERVER_PATH;
+
+      const respnse = await fetch(url + "/api/auth/verify", {
+        method: "GET",
+        credentials: "include",
+      });
+
       const user = (await respnse.json()) as User;
       if (respnse.status == 202) {
         setIsAuthenticated(true);

@@ -13,7 +13,7 @@ const RedirectFromAuth = () => {
   if (protectedloading) {
     return (
       <div>
-        <BounceLoader size={70} color="#e390eb" />
+        <BounceLoader size={70} color="#059669" />
       </div>
     );
   }

@@ -42,7 +42,7 @@ export class UsersService {
     try {
       const user = await this.prisma.user.findUnique({
         where: {
-          email: FindUserDto.email,
+          username: FindUserDto.username,
         },
       });
       return user;

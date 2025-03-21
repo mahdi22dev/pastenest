@@ -1,9 +1,7 @@
 import * as Yup from "yup";
 
 export const signInSchema = Yup.object({
-  email: Yup.string()
-    .email("Invalid email addresss")
-    .required("Required field"),
+  username: Yup.string().required("Username is required"),
   password: Yup.string()
     .max(20, "Must be 20 characters or less")
     .required("Required field"),

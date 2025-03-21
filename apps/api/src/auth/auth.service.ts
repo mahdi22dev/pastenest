@@ -55,7 +55,13 @@ export class AuthService {
 
       // send token
       if (token.access_token) {
-        response.cookie('pastenest_access_token', token.access_token);
+        response.cookie('pastenest_access_token', token.access_token, {
+          httpOnly: true, // Prevents JS from accessing the cookie
+          secure: process.env.NODE_ENV === 'production', // Only set 'secure' flag in production (if using HTTPS)
+          sameSite: 'none', // Allow cookie to be sent cross-origin
+          maxAge: 30 * 24 * 60 * 60 * 1000, // Optional: Set cookie expiration (30 days)
+        });
+
         request['user'] = payload;
         return token;
       } else {
@@ -123,12 +129,17 @@ export class AuthService {
   async verify(request: Request) {
     try {
       const auth_token = request.cookies.pastenest_access_token;
+      console.log('request coming', request.cookies);
+      console.log(auth_token);
       const user = await this.jwtService.verify(auth_token, {});
+      console.log(user);
+
       return user;
     } catch (error) {
       throw new UnauthorizedException('User unauthorized');
     }
   }
+
   async logOut(response: Response) {
     try {
       response.clearCookie('pastenest_access_token');
