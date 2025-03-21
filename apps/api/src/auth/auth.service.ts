@@ -56,10 +56,10 @@ export class AuthService {
       // send token
       if (token.access_token) {
         response.cookie('pastenest_access_token', token.access_token, {
-          httpOnly: true, // Prevents JS from accessing the cookie
-          secure: process.env.NODE_ENV === 'production', // Only set 'secure' flag in production (if using HTTPS)
-          sameSite: 'none', // Allow cookie to be sent cross-origin
-          maxAge: 30 * 24 * 60 * 60 * 1000, // Optional: Set cookie expiration (30 days)
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'none',
+          maxAge: 30 * 24 * 60 * 60 * 1000,
         });
 
         request['user'] = payload;
