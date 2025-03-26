@@ -46,10 +46,12 @@ const SignInForm = () => {
 
       localStorage.setItem("remember_me", "true");
       setMessage("");
+
       const url =
         process.env.NODE_ENV === "development"
           ? import.meta.env.VITE_LOCAL_SERVER_PATH
           : import.meta.env.VITE_SERVER_PATH;
+
       const response = await fetch(url + "/api/auth/signup", {
         method: "POST",
         headers: {
@@ -61,6 +63,7 @@ const SignInForm = () => {
           username: values.username,
           password: values.password,
         }),
+        credentials: "include",
       });
       let token = await response.json();
 
@@ -78,11 +81,6 @@ const SignInForm = () => {
 
       if (token?.access_token) {
         try {
-          // localStorage.setItem("auth_token", token.access_token);
-          document.cookie =
-            "pastenest_access_token=" +
-            token.access_token +
-            "; path=/; SameSite=None; Secure; max-age=2592000";
           return navigate("/user/posts");
         } catch (error) {
           toast({

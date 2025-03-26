@@ -1,14 +1,13 @@
 import { useAuth } from "@/providers/auth-guard";
-import { useEffect } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import { BounceLoader } from "react-spinners";
 
 const PrivateRoutes = () => {
   const { isAuthenticated, protectedloading, verfiyToken } = useAuth();
 
-  useEffect(() => {
-    verfiyToken();
-  }, []);
+  // useEffect(() => {
+  //   verfiyToken();
+  // }, []);
 
   if (protectedloading) {
     return (

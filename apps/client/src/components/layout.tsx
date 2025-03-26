@@ -1,7 +1,16 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import Navbar from "./navbar";
+import { useEffect } from "react";
+import { useAuth } from "@/providers/auth-guard";
 
 const Layout = () => {
+  const { setCurrentlocation } = useAuth();
+  const location = useLocation();
+
+  useEffect(() => {
+    setCurrentlocation(location);
+  }, [location]);
+
   return (
     <div>
       <Navbar />

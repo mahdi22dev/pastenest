@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 interface User {
   id: number;
@@ -12,15 +12,20 @@ interface AuthContextType {
   isAuthenticated: boolean;
   protectedloading: boolean;
   verfiyToken: () => Promise<User | undefined>;
+  setCurrentlocation: any;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
 export const AuthProvider = ({ children }: { children: JSX.Element }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [protectedloading, setprotectedLoading] = useState<boolean>(true);
+  const [currentlocation, setCurrentlocation] = useState();
+
   const verfiyToken = async () => {
     try {
       setprotectedLoading(true);
+
       const url =
         process.env.NODE_ENV === "development"
           ? import.meta.env.VITE_LOCAL_SERVER_PATH
@@ -45,9 +50,18 @@ export const AuthProvider = ({ children }: { children: JSX.Element }) => {
     }
   };
 
+  useEffect(() => {
+    verfiyToken();
+  }, [currentlocation]);
+
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, protectedloading, verfiyToken }}
+      value={{
+        isAuthenticated,
+        protectedloading,
+        verfiyToken,
+        setCurrentlocation,
+      }}
     >
       {children}
     </AuthContext.Provider>

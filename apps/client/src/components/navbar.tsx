@@ -1,4 +1,4 @@
-import { memo, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import useDeviceType from "@/hooks/devicetype";
 import { ModeToggle } from "./custom/mod-toggle";
 import { Menu, X } from "lucide-react";
@@ -12,6 +12,10 @@ import logo from "@/assets/logo.png";
 const Navbar = memo(() => {
   const isMobile = useDeviceType();
   const { isAuthenticated } = useAuth();
+
+  useEffect(() => {
+    console.log(isAuthenticated);
+  }, [isAuthenticated]);
 
   const logOut = async () => {
     try {
