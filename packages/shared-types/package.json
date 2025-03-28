@@ -1,0 +1,8 @@
+{
+  "name": "pastenest-types",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "dependencies": {
+    "typescript": "latest"
+  }
+}

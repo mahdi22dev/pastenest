@@ -19,7 +19,7 @@ import { PasteBody } from "@/lib/types";
 import { PulseLoader } from "react-spinners";
 import ReCAPTCHA from "react-google-recaptcha";
 import { useNavigate } from "react-router-dom";
-import { add } from "math-helpers";
+import { Paste } from "pastenest-types";
 
 export function PasteForm() {
   const [syntax, setSyntax] = useState("syntax");
@@ -31,8 +31,6 @@ export function PasteForm() {
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const navigate = useNavigate();
   const recaptchaRef = useRef<ReCAPTCHA>(null);
-  const f = add(1, 3);
-  console.log(f);
 
   const handlePostCreation = async (body: PasteBody) => {
     try {
@@ -48,17 +46,19 @@ export function PasteForm() {
         },
         body: JSON.stringify(body),
       });
-      const data = (await response.json()) as {
-        id: number;
-        pasteId: string;
-        title: string;
-        content: string;
-        createdAt: string;
-        experation: any;
-        mode: string;
-        password: any;
-        authorId: number;
-      };
+      const data = (await response.json()) as Paste;
+
+      // const data = (await response.json()) as {
+      //   id: number;
+      //   pasteId: string;
+      //   title: string;
+      //   content: string;
+      //   createdAt: string;
+      //   experation: any;
+      //   mode: string;
+      //   password: any;
+      //   authorId: number;
+      // };
 
       if (data?.pasteId) {
         return navigate("/" + data.pasteId);

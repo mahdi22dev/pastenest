@@ -1,5 +1,4 @@
-import { PastType } from "../../../../api/src/lib/types";
-type Paste = PastType;
+import { Paste } from "pastenest-types";
 
 export async function getPasteAction(
   params: any,

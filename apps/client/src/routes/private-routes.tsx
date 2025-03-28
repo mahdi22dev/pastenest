@@ -3,7 +3,7 @@ import { Navigate, Outlet } from "react-router-dom";
 import { BounceLoader } from "react-spinners";
 
 const PrivateRoutes = () => {
-  const { isAuthenticated, protectedloading, verfiyToken } = useAuth();
+  const { isAuthenticated, protectedloading } = useAuth();
 
   // useEffect(() => {
   //   verfiyToken();

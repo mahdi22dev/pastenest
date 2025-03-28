@@ -243,6 +243,9 @@ importers:
       math-helpers:
         specifier: workspace:*
         version: link:../../packages/math-helpers
+      pastenest-types:
+        specifier: 'workspace:'
+        version: link:../../packages/shared-types
       prisma:
         specifier: 6.4.1
         version: 6.4.1(typescript@5.5.3)
@@ -345,6 +348,12 @@ importers:
         version: 5.2.5(@types/node@20.16.1)
 
   packages/math-helpers:
+    dependencies:
+      typescript:
+        specifier: latest
+        version: 5.8.2
+
+  packages/shared-types:
     dependencies:
       typescript:
         specifier: latest
