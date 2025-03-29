@@ -35,7 +35,7 @@ export function PasteForm() {
   const handlePostCreation = async (body: PasteBody) => {
     try {
       const url =
-        process.env.NODE_ENV === "development"
+        process.env.NODE_ENV != "production"
           ? import.meta.env.VITE_LOCAL_SERVER_PATH
           : import.meta.env.VITE_SERVER_PATH;
 
